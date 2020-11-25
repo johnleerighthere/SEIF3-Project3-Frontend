@@ -5,7 +5,7 @@ const baseURL = 'http://localhost:5000/api/v1'
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    timeout: 5000,  // 5seconds
+    timeout: 10000,  // 5seconds
 })
 
 const dengueClustersAPI = {
