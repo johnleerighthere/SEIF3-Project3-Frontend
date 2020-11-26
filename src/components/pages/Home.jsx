@@ -35,6 +35,7 @@ class Home extends React.Component {
                 this.setState({
                     dengueClusters: response.data
                 })
+                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
@@ -66,20 +67,23 @@ class Home extends React.Component {
 
 
         return (
-            <div className="row">
+            <div className="container-fluid"> 
+                <div className="row">
                 {/* Important! Always set the container height explicitly */}
-                <div className="col-8 map">
-                    <h4> Dengue Clusters</h4>
-                    <GoogleMapReact
-                        bootstrapURLKeys={{ key: API_KEY }}
-                        defaultCenter={this.props.center}
-                        defaultZoom={this.props.zoom}
-                        yesIWantToUseGoogleMapApiInternals
-                        onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                    >
-                    </GoogleMapReact>
-                </div>
-            </div >
+                    <div className="col-8 map">
+                        {/* <h4> Dengue Clusters</h4> */}
+                        <GoogleMapReact
+                            bootstrapURLKeys={{ key: API_KEY }}
+                            defaultCenter={this.props.center}
+                            defaultZoom={this.props.zoom}
+                            yesIWantToUseGoogleMapApiInternals
+                            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                        >
+                        </GoogleMapReact>
+                    </div>
+                </div >
+            </div>
+            
         )
     }
 }
