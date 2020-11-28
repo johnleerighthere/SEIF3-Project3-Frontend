@@ -19,7 +19,7 @@ class SiteHeader extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/login" className="nav-link" >
+                                    <Link to="/users/login" className="nav-link" >
                                         Login
                                     </Link>
                                 </li>
