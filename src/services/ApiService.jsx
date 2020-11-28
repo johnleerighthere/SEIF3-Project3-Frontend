@@ -11,6 +11,20 @@ const axiosInstance = axios.create({
 const dengueClustersAPI = {
     getDengueClusters: () => {
         return axiosInstance.get('/clusters')
+    },
+
+    login: (email, password) => {
+        return axiosInstance.post('/users/login', qs.stringify({
+            email: email,
+            password: password,
+        }))
+    },
+
+    sendRegistrationForm: (formInputs) => {
+        console.log(formInputs)
+        return axiosInstance.post('/users/register', qs.stringify(
+            formInputs
+        ))
     }
 }
 
