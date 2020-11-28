@@ -6,6 +6,7 @@ import './Home.scss'
 require('dotenv').config()
 
 //const AnyReactComponent = ({ text }) => <div className="marker">{text}</div>;
+// new features
 
 class Home extends React.Component {
     // Define the cordinate of Singapore and load the google map with the zoom of level 11.4
@@ -67,9 +68,9 @@ class Home extends React.Component {
 
 
         return (
-            <div className="container-fluid"> 
+            <div className="container-fluid">
                 <div className="row">
-                {/* Important! Always set the container height explicitly */}
+                    {/* Important! Always set the container height explicitly */}
                     <div className="col-8 map">
                         {/* <h4> Dengue Clusters</h4> */}
                         <GoogleMapReact
@@ -83,7 +84,7 @@ class Home extends React.Component {
                     </div>
                 </div >
             </div>
-            
+
         )
     }
 }
