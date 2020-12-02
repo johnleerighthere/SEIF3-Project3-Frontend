@@ -3,6 +3,8 @@ import GoogleMapReact from 'google-map-react'
 import apiService from '../../services/ApiService'
 import SearchBarComponent from '../SearchBar'
 import './Home.scss'
+import SearchHistory from '../SearchHistory'
+import SearchBarComponent from '../SearchBar'
 
 require('dotenv').config()
 
@@ -20,13 +22,25 @@ class Home extends React.Component {
         super(props)
         this.state = {
             dengueClusters: [],
+            history: []
+        }
+    }
+
+    passpropstosearchHistory = (obj) => {
+        this.setState({ history: [...this.state.history, ...obj] })
+    }
+
+    componentDidMount() {
+        this.getDengueClusters()
+    }
+
+
             currentLatLng: {
                 lat: 0,
                 lng: 0
             },
         }
     }
-
     // Get the Dengue Clusters data from NEA through backend. Daily update
     getDengueClusters() {
         apiService.getDengueClusters()
@@ -66,10 +80,10 @@ class Home extends React.Component {
         }
     }
 
-    handleNewAddress = (addressValue) => {
-        console.log("This is the latlng once the search button is clicked" + addressValue)
-        //@Dom
-    }
+//     handleNewAddress = (addressValue) => {
+//         console.log("This is the latlng once the search button is clicked" + addressValue)
+//         //@Dom
+//     }
 
     componentDidMount() {
         this.getDengueClusters()
@@ -109,8 +123,8 @@ class Home extends React.Component {
         }
 
         return (
-            <div className="container-fluid main-home-container"> 
 
+            <div className="container-fluid main-home-container"> 
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
                     <div className="col-8 map">
@@ -123,14 +137,15 @@ class Home extends React.Component {
                         >
                         </GoogleMapReact>
 
+
                     </div>
                 </div>
-                    <div className="row">
-                        <div className="col search-bar">
-                            <SearchBarComponent onNewAddress={this.handleNewAddress} />
-                        </div>
+                <div className="row">
+                    <div className="col search-bar">
+                        <SearchBarComponent call={this.passpropstosearchHistory} />
+                        <SearchHistory history={this.state.history}></SearchHistory>
                     </div>
-                   
+                </div>
             </div>
 
         )
