@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
     geocodeByAddress,
-    geocodeByPlaceId,
+    // geocodeByPlaceId,
     getLatLng,
 } from 'react-places-autocomplete';
 import toastr from 'toastr';
@@ -39,14 +39,16 @@ class SearchBarComponent extends React.Component {
             toastr.error("please select a place from the suggesstions")
             return false
         }
-        Axios.post("http://localhost:5000/api/v1/clusters", { LatLng: this.state.latlng })
+        Axios.post("http://localhost:5000/api/v1/findLatLng", { LatLng: this.state.latlng })
             .then(res => {
                 console.log(res)
                 this.setState({
                     obj: { ...this.state.obj, riskArea: res.data }
-                }, () => {
-                    this.props.call([this.state.obj])
-                })
+                }
+                // , () => {
+                //     this.props.call([this.state.obj])
+                // }
+                )
             })
     }
 
@@ -67,7 +69,7 @@ class SearchBarComponent extends React.Component {
             <div>
 
                 <form>
-                    <label style={{ fontWeight: 'bold', color: 'black' }}>Area to check:
+                    <label id="search-label" style={{ fontWeight: 'bold', color: 'black' }}>Area to check:
                     </label>
                     <PlacesAutocomplete
                         value={this.state.address}
@@ -76,7 +78,7 @@ class SearchBarComponent extends React.Component {
                     >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                             <div>
-                                <input
+                                <input className="d-inline" id="search-input"
                                     {...getInputProps({
                                         placeholder: 'Search Places ...',
                                         className: 'location-search-input',
@@ -108,7 +110,7 @@ class SearchBarComponent extends React.Component {
                             </div>
                         )}
                     </PlacesAutocomplete>
-                    <Button type="button" value="Submit" variant="primary" onClick={this.submitData}>Submit</Button>
+                    <Button id="search-button" type="button" value="Submit" variant="primary" onClick={this.submitData}>Submit</Button>
                 </form>
             </div >
 
