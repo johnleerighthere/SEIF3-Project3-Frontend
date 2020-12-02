@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 import Ajv from 'ajv'
 import apiService from '../../services/ApiService'
 import registrationFormValidationSchema from '../../validation-schemas/registration-form'
+import {
+    geocodeByAddress,
+    getLatLng,
+} from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 import '../auth/Register.scss'
 
 const ajv = new Ajv({ allErrors: true })
@@ -28,6 +33,18 @@ class Registration extends React.Component {
         this.setState(state)
     }
 
+    handleChange = address => {
+        this.setState({ address });
+    };
+
+    handleSelect = address => {
+        geocodeByAddress(address)
+            .then(results => {
+                const address = results[0].formatted_address
+                this.setState({ address })
+            })
+    }
+
     handleFormSubmission(e) {
         e.preventDefault()
 
@@ -36,7 +53,7 @@ class Registration extends React.Component {
             formMsg: []
         })
 
-        // Form validation
+        // Send all the Form inputs for validation
         const formValid = this.validateFormInputs()
 
         if (formValid) {
@@ -69,6 +86,7 @@ class Registration extends React.Component {
         }
     }
 
+
     validateFormInputs() {
         const err = []
         const formValid = ajv.validate(registrationFormValidationSchema, this.state)
@@ -95,19 +113,20 @@ class Registration extends React.Component {
         return false
     }
 
+
     render() {
         return (
             <div className="page-registration">
                 <div className="container">
-                    <form className="mt-5 mb-5 form col-lg-8" onSubmit={e => { this.handleFormSubmission(e) }}>
+                    <form className="mt-5 mb-5 form col-lg-8" onSubmit={e => { this.handleFormSubmission(e) }} >
                         {
                             this.state.formMsg.length > 0 ?
                                 (
-                                    <ul className="form-messages text-left">
+                                    <ul className="form-messages text-left" >
                                         {
                                             this.state.formMsg.map(msg => {
                                                 return (
-                                                    <li>{msg}</li>
+                                                    <li>{msg.replace(/[&\\#,+()$~%.'":*?<>{}]/g, '')}</li>
                                                 )
                                             })
                                         }
@@ -129,18 +148,60 @@ class Registration extends React.Component {
                         <div className="form-row">
                             <div className="form-group col-md-6">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" className="form-control form-control-lg" name="password" placeholder="Min. 5" onChange={e => { this.handleInputChange(e) }} />
+                                <input type="password" className="form-control form-control-lg" name="password" value={this.state.password} placeholder="Min. 5" onChange={e => { this.handleInputChange(e) }} />
                             </div>
 
                             <div className="form-group col-md-6">
                                 <label htmlFor="confirmPassword">Confirm Password</label>
-                                <input type="password" className="form-control form-control-lg" name="confirmPassword" onChange={e => { this.handleInputChange(e) }} />
+                                <input type="password" className="form-control form-control-lg" name="confirmPassword" value={this.state.confirmPassword} onChange={e => { this.handleInputChange(e) }} />
                             </div>
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="address">Address</label>
-                            <input type="text" className="form-control form-control-lg" name="address" value={this.state.address} onChange={e => { this.handleInputChange(e) }} />
+                            <PlacesAutocomplete
+                                value={this.state.address}
+                                onChange={this.handleChange}
+                                onSelect={this.handleSelect}
+                            >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                    <div>
+                                        <input
+                                            {...getInputProps({
+                                                placeholder: 'Type Address....',
+                                                className: 'form-control form-control-lg',
+                                            })}
+                                        />
+
+                                        <div className="autocomplete-dropdown-container">
+                                            {loading && <div>Loading...</div>}
+
+                                            {suggestions.map((suggestion, i) => {
+                                                const className = suggestion.active
+                                                    ? 'suggestion-item--active'
+                                                    : 'suggestion-item';
+                                                // inline style for demonstration purpose
+                                                const style = suggestion.active
+                                                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                                    : { backgroundColor: '#ffffff', cursor: 'pointer' }
+
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        {...getSuggestionItemProps(suggestion, {
+                                                            className,
+                                                            style,
+                                                        })}
+                                                    >
+                                                        <span>{suggestion.description}</span>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </PlacesAutocomplete>
+
                         </div>
                         <div className="form-group">
                             <label htmlFor="phone">Phone No.</label>

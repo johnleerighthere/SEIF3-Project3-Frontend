@@ -6,8 +6,6 @@ import './Home.scss'
 
 require('dotenv').config()
 
-//const AnyReactComponent = ({ text }) => <div className="marker">{text}</div>;
-
 class Home extends React.Component {
     // Define the cordinate of Singapore and load the google map with the zoom of level 11.4
     static defaultProps = {
@@ -18,15 +16,15 @@ class Home extends React.Component {
         zoom: 11.4
     }
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            dengueClusters: []
+            dengueClusters: [],
+            currentLatLng: {
+                lat: 0,
+                lng: 0
+            },
         }
-    }
-
-    componentDidMount() {
-        this.getDengueClusters()
     }
 
     // Get the Dengue Clusters data from NEA through backend. Daily update
@@ -36,12 +34,45 @@ class Home extends React.Component {
                 this.setState({
                     dengueClusters: response.data
                 })
-                console.log(response.data)
             })
             .catch(err => {
                 console.log(err)
             })
     }
+
+    showCurrentLocation = () => {
+
+        // finding out if a system geolocation is available or not. Tested and it's available
+        // if ("geolocation" in navigator) {
+        //     console.log("Available")
+        // } else {
+        //     console.log("Not Available")
+        // }
+
+        // Using navigator.geolocation.watchPosition instead of getCurrentPosition() method so that able to get user postion when user changes location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                console.log(position)
+                this.setState({
+                    currentLatLng: {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    }
+                })
+
+            },
+                (err) => { this.setState({ errorMessage: "User denied geolocation" }) }
+            )
+        }
+    }
+
+    componentDidMount() {
+        this.getDengueClusters()
+        this.showCurrentLocation()
+
+    }
+
+
 
     render() {
         // Define the Google Map API Key
@@ -49,9 +80,9 @@ class Home extends React.Component {
 
         const handleApiLoaded = (map, maps) => {
 
+            // Draw the Dengue Cluster zone based on the Latitude and Longtitude provided
             let clustersArray = this.state.dengueClusters
 
-            // Draw the Dengue Cluster zone based on the Latitude and Longtitude provided
             clustersArray.forEach(clusterCoords => {
                 var clusters = new maps.Polygon({
                     paths: clusterCoords,
@@ -62,17 +93,22 @@ class Home extends React.Component {
                     fillOpacity: 0.35
                 });
                 clusters.setMap(map);
-
             })
-        }
 
+            let marker = new maps.Marker({
+                position: this.state.currentLatLng,
+                map,
+                title: "Current Location"
+            })
+            marker.setMap(map)
+        }
 
         return (
             <div className="container-fluid main-home-container"> 
+
                 <div className="row">
-                {/* Important! Always set the container height explicitly */}
+                    {/* Important! Always set the container height explicitly */}
                     <div className="col-8 map">
-                        {/* <h4> Dengue Clusters</h4> */}
                         <GoogleMapReact
                             bootstrapURLKeys={{ key: API_KEY }}
                             defaultCenter={this.props.center}
@@ -81,6 +117,7 @@ class Home extends React.Component {
                             onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                         >
                         </GoogleMapReact>
+
                     </div>
                 </div>
                     <div className="row">
@@ -90,7 +127,7 @@ class Home extends React.Component {
                     </div>
                    
             </div>
-            
+
         )
     }
 }
