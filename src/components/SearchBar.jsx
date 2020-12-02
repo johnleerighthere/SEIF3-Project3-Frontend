@@ -1,4 +1,4 @@
-import Axios from 'axios';
+// import Axios from 'axios';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import PlacesAutocomplete from 'react-places-autocomplete';
@@ -28,7 +28,7 @@ class SearchBarComponent extends React.Component {
 
     }
     submitData = () => {
-        console.log(this.state.latlng)
+        console.log(this.state.latLng)
         if (!this.state.address) {
             console.log("enter some address")
             toastr.error("please enter some address")
@@ -39,17 +39,19 @@ class SearchBarComponent extends React.Component {
             toastr.error("please select a place from the suggesstions")
             return false
         }
-        Axios.post("http://localhost:5000/api/v1/findLatLng", { LatLng: this.state.latlng })
-            .then(res => {
-                console.log(res)
-                this.setState({
-                    obj: { ...this.state.obj, riskArea: res.data }
-                }
-                // , () => {
-                //     this.props.call([this.state.obj])
-                // }
-                )
-            })
+        console.log(this.state.latLng)
+
+        // Axios.post("http://localhost:5000/api/v1/findLatLng", { LatLng: this.state.latlng })
+        //     .then(res => {
+        //         console.log(res)
+        //         this.setState({
+        //             obj: { ...this.state.obj, riskArea: res.data }
+        //         }
+        //         // , () => {
+        //         //     this.props.call([this.state.obj])
+        //         // }
+        //         )
+        //     })
     }
 
     handleChange = address => {
