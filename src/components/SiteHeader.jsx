@@ -24,7 +24,7 @@ class SiteHeader extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/register" className="nav-link" >
+                                    <Link to="/users/register" className="nav-link" >
                                         Register
                                     </Link>
                                 </li>
