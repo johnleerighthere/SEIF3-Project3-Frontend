@@ -39,15 +39,16 @@ class SearchBarComponent extends React.Component {
             toastr.error("please select a place from the suggesstions")
             return false
         }
-        Axios.post("http://localhost:5000/api/v1/clusters", { LatLng: this.state.latlng })
-            .then(res => {
-                console.log(res)
-                this.setState({
-                    obj: { ...this.state.obj, riskArea: res.data }
-                }, () => {
-                    this.props.call([this.state.obj])
-                })
-            })
+        this.props.call([this.state.obj])
+        // Axios.post("http://localhost:5000/api/v1/clusters", { LatLng: this.state.latlng })
+        //     .then(res => {
+        //         console.log(res)
+        //         this.setState({
+        //             obj: { ...this.state.obj, riskArea: res.data }
+        //         }, () => {
+        //             this.props.call([this.state.obj])
+        //         })
+        //     })
     }
 
     handleChange = address => {
@@ -58,7 +59,7 @@ class SearchBarComponent extends React.Component {
         this.setState({ address })
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
-            .then(res => this.setState({ latLng: res.lat + "," + res.lng, obj: { latLng: res.lat + "," + res.lng, riskArea: "", location: address } }))
+            .then(res => this.setState({ latLng: res.lat + "," + res.lng, obj: { latLng: res.lat + "," + res.lng, riskArea: "High", location: address } }))
             .catch(error => console.error('Error', error));
     };
 

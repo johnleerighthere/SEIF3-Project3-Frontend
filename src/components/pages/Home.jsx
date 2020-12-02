@@ -2,6 +2,8 @@ import React from 'react'
 import GoogleMapReact from 'google-map-react'
 import apiService from '../../services/ApiService'
 import './Home.scss'
+import SearchHistory from '../SearchHistory'
+import SearchBarComponent from '../SearchBar'
 
 require('dotenv').config()
 
@@ -20,8 +22,13 @@ class Home extends React.Component {
     constructor() {
         super()
         this.state = {
-            dengueClusters: []
+            dengueClusters: [],
+            history: []
         }
+    }
+
+    passpropstosearchHistory = (obj) => {
+        this.setState({ history: [...this.state.history, ...obj] })
     }
 
     componentDidMount() {
@@ -67,9 +74,9 @@ class Home extends React.Component {
 
 
         return (
-            <div className="container-fluid"> 
+            <div className="container-fluid main-home-container">
                 <div className="row">
-                {/* Important! Always set the container height explicitly */}
+                    {/* Important! Always set the container height explicitly */}
                     <div className="col-8 map">
                         {/* <h4> Dengue Clusters</h4> */}
                         <GoogleMapReact
@@ -80,10 +87,18 @@ class Home extends React.Component {
                             onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                         >
                         </GoogleMapReact>
+
                     </div>
-                </div >
+                </div>
+                <div className="row">
+                    <div className="col search-bar">
+                        <SearchBarComponent call={this.passpropstosearchHistory} />
+                        <SearchHistory history={this.state.history}></SearchHistory>
+                    </div>
+                </div>
+
             </div>
-            
+
         )
     }
 }
