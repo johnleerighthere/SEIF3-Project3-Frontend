@@ -66,6 +66,11 @@ class Home extends React.Component {
         }
     }
 
+    handleNewAddress = (addressValue) => {
+        console.log("This is the latlng once the search button is clicked" + addressValue)
+        //@Dom
+    }
+
     componentDidMount() {
         this.getDengueClusters()
         this.showCurrentLocation()
@@ -122,7 +127,7 @@ class Home extends React.Component {
                 </div>
                     <div className="row">
                         <div className="col search-bar">
-                            <SearchBarComponent />
+                            <SearchBarComponent onNewAddress={this.handleNewAddress} />
                         </div>
                     </div>
                    

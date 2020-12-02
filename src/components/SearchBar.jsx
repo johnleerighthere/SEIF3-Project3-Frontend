@@ -28,7 +28,6 @@ class SearchBarComponent extends React.Component {
 
     }
     submitData = () => {
-        console.log(this.state.latLng)
         if (!this.state.address) {
             console.log("enter some address")
             toastr.error("please enter some address")
@@ -39,19 +38,8 @@ class SearchBarComponent extends React.Component {
             toastr.error("please select a place from the suggesstions")
             return false
         }
-        console.log(this.state.latLng)
 
-        // Axios.post("http://localhost:5000/api/v1/findLatLng", { LatLng: this.state.latlng })
-        //     .then(res => {
-        //         console.log(res)
-        //         this.setState({
-        //             obj: { ...this.state.obj, riskArea: res.data }
-        //         }
-        //         // , () => {
-        //         //     this.props.call([this.state.obj])
-        //         // }
-        //         )
-        //     })
+        this.props.onNewAddress(this.state.latLng)
     }
 
     handleChange = address => {
