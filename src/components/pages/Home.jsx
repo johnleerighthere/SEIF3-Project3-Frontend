@@ -1,6 +1,7 @@
 import React from 'react'
 import GoogleMapReact from 'google-map-react'
 import apiService from '../../services/ApiService'
+import SearchBarComponent from '../SearchBar'
 import './Home.scss'
 
 require('dotenv').config()
@@ -103,7 +104,8 @@ class Home extends React.Component {
         }
 
         return (
-            <div className="container-fluid">
+            <div className="container-fluid main-home-container"> 
+
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
                     <div className="col-8 map">
@@ -117,7 +119,13 @@ class Home extends React.Component {
                         </GoogleMapReact>
 
                     </div>
-                </div >
+                </div>
+                    <div className="row">
+                        <div className="col search-bar">
+                            <SearchBarComponent />
+                        </div>
+                    </div>
+                   
             </div>
 
         )
