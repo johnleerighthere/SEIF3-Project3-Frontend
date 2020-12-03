@@ -22,10 +22,7 @@ class SearchBarComponent extends React.Component {
         }
     }
     inputChange = (event) => {
-
         this.setState({ area: event.target.value });
-
-
     }
     submitData = () => {
         if (!this.state.address) {
@@ -69,7 +66,7 @@ class SearchBarComponent extends React.Component {
         return (
             <div>
 
-                <form>
+                <form className="form-inline">
                     <label id="search-label" style={{ fontWeight: 'bold', color: 'black' }}>Area to check:
                     </label>
                     <PlacesAutocomplete
@@ -79,7 +76,7 @@ class SearchBarComponent extends React.Component {
                     >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                             <div>
-                                <input className="d-inline" id="search-input"
+                                <input className="form-group mb-2" id="search-input"
                                     {...getInputProps({
                                         placeholder: 'Search Places ...',
                                         className: 'location-search-input',
@@ -114,8 +111,6 @@ class SearchBarComponent extends React.Component {
                     <Button id="search-button" type="button" value="Submit" variant="primary" onClick={this.submitData}>Submit</Button>
                 </form>
             </div >
-
-
         )
     }
 

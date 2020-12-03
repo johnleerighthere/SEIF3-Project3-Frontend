@@ -144,41 +144,41 @@ class Home extends React.Component {
             marker.setMap(map)
         }
         this.getDengueClusters()
-        this.showCurrentLocation()
 
         return (
 
-            <div className="container-fluid main-home-container"> 
+            <div className="container main-home-container"> 
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
-                    <div className="col-8 map">
-                        <GoogleMapReact
-                            bootstrapURLKeys={{ key: API_KEY }}
-                            defaultCenter={this.props.center}
-                            defaultZoom={this.props.zoom}
-                            center={this.state.currentLatLng}
-                            zoom={this.state.zoom}
-                            yesIWantToUseGoogleMapApiInternals
-                            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                        >
-                            <AnyReactComponent
-                                lat={this.state.currentLatLng.lat}
-                                lng={this.state.currentLatLng.lng}
-                                text='A'
-                            />
+                    <div className="col-8">
+                        <div className="map">
+                            <GoogleMapReact
+                                bootstrapURLKeys={{ key: API_KEY }}
+                                defaultCenter={this.props.center}
+                                defaultZoom={this.props.zoom}
+                                center={this.state.currentLatLng}
+                                zoom={this.state.zoom}
+                                yesIWantToUseGoogleMapApiInternals
+                                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                            >
+                                <AnyReactComponent
+                                    lat={this.state.currentLatLng.lat}
+                                    lng={this.state.currentLatLng.lng}
+                                    text='A'
+                                />
 
-                        </GoogleMapReact>
-
-
+                            </GoogleMapReact>
+                        </div>
+                        <div className="search-bar">
+                            <SearchBarComponent onNewAddress={this.handleNewAddress} />
+                        </div>
+                    </div>
+                    <div className="col-4">
+                        <div className="home-card">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas dicta, laborum ab est a laudantium. Beatae, iusto maxime labore expedita nihil nam, eum asperiores, reprehenderit dolorem consequuntur nisi dolores officiis.
+                        </div>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col search-bar">
-                        <SearchBarComponent onNewAddress={this.handleNewAddress} />
-                    </div>
-                </div>
-
-
             </div>
 
         )
