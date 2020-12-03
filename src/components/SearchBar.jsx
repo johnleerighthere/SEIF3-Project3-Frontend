@@ -39,7 +39,7 @@ class SearchBarComponent extends React.Component {
             return false
         }
 
-        this.props.call([this.state.obj])
+        // this.props.call([this.state.obj])
         // Axios.post("http://localhost:5000/api/v1/clusters", { LatLng: this.state.latlng })
         //     .then(res => {
         //         console.log(res)

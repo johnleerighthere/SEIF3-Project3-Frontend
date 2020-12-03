@@ -3,8 +3,7 @@ import GoogleMapReact from 'google-map-react'
 import apiService from '../../services/ApiService'
 import SearchBarComponent from '../SearchBar'
 import './Home.scss'
-import SearchHistory from '../SearchHistory'
-import SearchBarComponent from '../SearchBar'
+// import SearchHistory from '../SearchHistory'
 
 require('dotenv').config()
 
@@ -43,22 +42,10 @@ class Home extends React.Component {
         super(props)
         this.state = {
             dengueClusters: [],
-            history: []
-        }
-    }
-
-    passpropstosearchHistory = (obj) => {
-        this.setState({ history: [...this.state.history, ...obj] })
-    }
-
-    componentDidMount() {
-        this.getDengueClusters()
-    }
-
-
+            history: [],
             currentLatLng: {
-                lat: 0,
-                lng: 0
+                lat: 1.360270,
+                lng: 103.851759
             },
             searchPosition: {
                 lat: 0,
@@ -67,6 +54,11 @@ class Home extends React.Component {
             zoom: 0
         }
     }
+
+    passpropstosearchHistory = (obj) => {
+        this.setState({ history: [...this.state.history, ...obj] })
+    }
+
     // Get the Dengue Clusters data from NEA through backend. Daily update
     getDengueClusters() {
         apiService.getDengueClusters()
@@ -108,7 +100,6 @@ class Home extends React.Component {
 
 
     handleNewAddress = (addressValue) => {
-        //@Dom
         const searchPosition = addressValue.split(',')
         this.setState({
             currentLatLng: {
@@ -122,7 +113,6 @@ class Home extends React.Component {
     componentDidMount() {
         this.getDengueClusters()
         this.showCurrentLocation()
-
     }
 
     render() {
@@ -153,6 +143,8 @@ class Home extends React.Component {
             })
             marker.setMap(map)
         }
+        this.getDengueClusters()
+        this.showCurrentLocation()
 
         return (
 
