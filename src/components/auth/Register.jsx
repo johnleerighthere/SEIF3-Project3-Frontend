@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom'
 import Ajv from 'ajv'
 import apiService from '../../services/ApiService'
 import registrationFormValidationSchema from '../../validation-schemas/registration-form'
-import {
-    geocodeByAddress,
-    getLatLng,
-} from 'react-places-autocomplete';
+import { geocodeByAddress } from 'react-places-autocomplete';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import '../auth/Register.scss'
 

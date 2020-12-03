@@ -6,6 +6,27 @@ import './Home.scss'
 
 require('dotenv').config()
 
+const AnyReactComponent = ({ text }) =>
+
+    <div style={{
+        position: 'absolute',
+        width: 40,
+        height: 40,
+        left: -40 / 2,
+        top: -40 / 2,
+
+        border: '5px solid #f44336',
+        borderRadius: 40,
+        backgroundColor: 'white',
+        textAlign: 'center',
+        color: '#3f51b5',
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 4
+    }}>
+        {text}
+    </div>;
+
 class Home extends React.Component {
     // Define the cordinate of Singapore and load the google map with the zoom of level 11.4
     static defaultProps = {
@@ -24,6 +45,11 @@ class Home extends React.Component {
                 lat: 0,
                 lng: 0
             },
+            searchPosition: {
+                lat: 0,
+                lng: 0
+            },
+            zoom: 0
         }
     }
 
@@ -67,8 +93,15 @@ class Home extends React.Component {
     }
 
     handleNewAddress = (addressValue) => {
-        console.log("This is the latlng once the search button is clicked" + addressValue)
         //@Dom
+        const searchPosition = addressValue.split(',')
+        this.setState({
+            currentLatLng: {
+                lat: Number(searchPosition[0]),
+                lng: Number(searchPosition[1]),
+            },
+            zoom: 14
+        })
     }
 
     componentDidMount() {
@@ -76,8 +109,6 @@ class Home extends React.Component {
         this.showCurrentLocation()
 
     }
-
-
 
     render() {
         // Define the Google Map API Key
@@ -109,7 +140,7 @@ class Home extends React.Component {
         }
 
         return (
-            <div className="container-fluid main-home-container"> 
+            <div className="container-fluid main-home-container">
 
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
@@ -118,19 +149,27 @@ class Home extends React.Component {
                             bootstrapURLKeys={{ key: API_KEY }}
                             defaultCenter={this.props.center}
                             defaultZoom={this.props.zoom}
+                            center={this.state.currentLatLng}
+                            zoom={this.state.zoom}
                             yesIWantToUseGoogleMapApiInternals
                             onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                         >
+                            <AnyReactComponent
+                                lat={this.state.currentLatLng.lat}
+                                lng={this.state.currentLatLng.lng}
+                                text='A'
+                            />
+
                         </GoogleMapReact>
 
                     </div>
                 </div>
-                    <div className="row">
-                        <div className="col search-bar">
-                            <SearchBarComponent onNewAddress={this.handleNewAddress} />
-                        </div>
+                <div className="row">
+                    <div className="col search-bar">
+                        <SearchBarComponent onNewAddress={this.handleNewAddress} />
                     </div>
-                   
+                </div>
+
             </div>
 
         )
