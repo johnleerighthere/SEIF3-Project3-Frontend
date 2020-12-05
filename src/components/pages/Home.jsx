@@ -11,21 +11,29 @@ const AnyReactComponent = ({ text }) =>
 
     <div style={{
         position: 'absolute',
-        width: 40,
-        height: 40,
-        left: -40 / 2,
-        top: -40 / 2,
-
-        border: '5px solid #f44336',
-        borderRadius: 40,
-        backgroundColor: 'white',
-        textAlign: 'center',
-        color: '#3f51b5',
-        fontSize: 16,
-        fontWeight: 'bold',
-        padding: 4
+        left: -50 / 2,
+        top: -50 / 2,
+        border: '1px solid #f44336',
+        height: 50,
+        width: 50,
+        borderRadius: 2000,
     }}>
-        {text}
+        <div style={{
+            width: 30,
+            height: 30,
+            marginTop: 10,
+            marginLeft: 10,
+            border: '5px solid #f44336',
+            borderRadius: 40,
+            backgroundColor: 'white',
+            textAlign: 'center',
+            color: '#3f51b5',
+            fontSize: 12,
+            fontWeight: 'bold',
+            padding: 2
+        }}>
+            {text}
+        </div>
     </div>;
 
 class Home extends React.Component {
@@ -35,7 +43,7 @@ class Home extends React.Component {
             lat: 1.360270,
             lng: 103.851759
         },
-        zoom: 11.4
+        zoom: 11.6
     }
 
     constructor(props) {
@@ -43,15 +51,13 @@ class Home extends React.Component {
         this.state = {
             dengueClusters: [],
             history: [],
-            currentLatLng: {
-                lat: 1.360270,
-                lng: 103.851759
-            },
+            apiReady: true,
+            currentLatLng: this.props.center,
             searchPosition: {
                 lat: 0,
                 lng: 0
             },
-            zoom: 0
+            // zoom: 0
         }
     }
 
@@ -72,8 +78,7 @@ class Home extends React.Component {
             })
     }
 
-    showCurrentLocation = () => {
-
+    getCurrentLocation = () => {
         // finding out if a system geolocation is available or not. Tested and it's available
         // if ("geolocation" in navigator) {
         //     console.log("Available")
@@ -84,17 +89,31 @@ class Home extends React.Component {
         // Using navigator.geolocation.watchPosition instead of getCurrentPosition() method so that able to get user postion when user changes location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
-                console.log(position)
                 this.setState({
                     currentLatLng: {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     }
                 })
-
             },
-                (err) => { this.setState({ errorMessage: "User denied geolocation" }) }
+                (err) => {
+                    this.setState({
+                        errorMessage: "User denied geolocation",
+                        currentLatLng: {
+                            lat: this.props.center.lat,
+                            lng: this.props.center.lng,
+                        }
+                    })
+                }
             )
+        } else {
+            this.setState({
+                errorMessage: "Geolocation unavailable",
+                currentLatLng: {
+                    lat: this.props.center.lat,
+                    lng: this.props.center.lng,
+                }
+            })
         }
     }
 
@@ -106,16 +125,27 @@ class Home extends React.Component {
                 lat: Number(searchPosition[0]),
                 lng: Number(searchPosition[1]),
             },
-            zoom: 14
+            zoom: 14,
+            radius: 111,
+            options: {
+                strokeColor: "#ff0000"
+            }
         })
     }
 
     componentDidMount() {
         this.getDengueClusters()
-        this.showCurrentLocation()
+
     }
 
+
+
+
+
+
     render() {
+        this.getCurrentLocation()
+
         // Define the Google Map API Key
         const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API
 
@@ -136,18 +166,39 @@ class Home extends React.Component {
                 clusters.setMap(map);
             })
 
-            let marker = new maps.Marker({
-                position: this.state.currentLatLng,
-                map,
-                title: "Current Location"
-            })
-            marker.setMap(map)
+            // let marker = new maps.Marker({
+            //     position: this.state.currentLatLng,
+            //     map,
+            //     title: "Current Location"
+            // })
+
+            // let circle = new maps.Circle({
+            //     // center: this.state.currentLatLng,
+            //     // radius: 111,
+            //     // fillColor: 'AA0000',
+            //     // fillOpacity: 0.1,
+            //     // map,
+            //     // strokeColor: "#FFFFFF",
+            //     // strokeOpacity: 0.1,
+            //     // strokeWeight: 2,
+            //     // strokeColor: "#FF0000",
+
+            //     strokeOpacity: 0.8,
+            //     strokeWeight: 2,
+            //     fillColor: "#FF0000",
+            //     fillOpacity: 0.35,
+            //     map,
+            //     center: this.state.currentLatLng,
+            //     radius: 1000,
+            // })
+            // circle.bindTo('center', marker, 'position')
+            // circle.setMap(map)
         }
-        this.getDengueClusters()
+        // this.getDengueClusters()
 
         return (
 
-            <div className="container main-home-container"> 
+            <div className="container main-home-container">
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
                     <div className="col-8">
@@ -156,11 +207,13 @@ class Home extends React.Component {
                                 bootstrapURLKeys={{ key: API_KEY }}
                                 defaultCenter={this.props.center}
                                 defaultZoom={this.props.zoom}
+
                                 center={this.state.currentLatLng}
                                 zoom={this.state.zoom}
                                 yesIWantToUseGoogleMapApiInternals
                                 onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
                             >
+
                                 <AnyReactComponent
                                     lat={this.state.currentLatLng.lat}
                                     lng={this.state.currentLatLng.lng}
@@ -184,5 +237,6 @@ class Home extends React.Component {
         )
     }
 }
+
 
 export default Home
