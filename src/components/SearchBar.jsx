@@ -27,27 +27,17 @@ class SearchBarComponent extends React.Component {
     submitData = () => {
         if (!this.state.address) {
             console.log("enter some address")
-            toastr.error("please enter some address")
+            toastr.error("Please enter an address")
             return false
         }
         if (!this.state.latLng) {
             console.log("please select a place from the suggesstions")
-            toastr.error("please select a place from the suggesstions")
+            toastr.error("Please select a place from the suggestions")
             return false
         }
 
-        // this.props.call([this.state.obj])
-        // Axios.post("http://localhost:5000/api/v1/clusters", { LatLng: this.state.latlng })
-        //     .then(res => {
-        //         console.log(res)
-        //         this.setState({
-        //             obj: { ...this.state.obj, riskArea: res.data }
-        //         }, () => {
-        //             this.props.call([this.state.obj])
-        //         })
-        //     })
-
         this.props.onNewAddress(this.state.latLng)
+        this.setState({ latLng: "" })
     }
 
     handleChange = address => {

@@ -3,6 +3,8 @@ import { Map, Marker, Circle, InfoWindow, GoogleApiWrapper, Polygon } from 'goog
 import apiService from '../../services/ApiService'
 import SearchBarComponent from '../SearchBar'
 import './Home.scss'
+import Axios from 'axios'
+import RiskAreaWarningMessage from '../RiskAreaWarningMessage'
 
 require('dotenv').config()
 
@@ -20,10 +22,17 @@ class Home extends React.Component {
         super(props)
         this.state = {
             currentLatLng: this.props.center,
-            dengueClusters:[],
+            dengueClusters: [],
             redDengueClusters: [],
             yellowDengueClusters: [],
-            zoom: 11.5
+            loggedIn: false,
+            currentLocationUrl: "",
+            history: [],
+            zoom: 11.5,
+            searchPosition: {
+                lat: 0,
+                lng: 0
+            },
         }
     }
 
@@ -76,13 +85,13 @@ class Home extends React.Component {
                 const dengueClusters = []
                 const redDengueClusters = []
                 const yellowDengueClusters = []
-                
+
                 clustersData.forEach(cluster => {
                     dengueClusters.push(cluster.coordsArr)
                 })
 
                 clustersData.forEach(cluster => {
-                    if(cluster.color === "yellow") {
+                    if (cluster.color === "yellow") {
                         yellowDengueClusters.push(cluster.coordsArr)
                     } else if (cluster.color === "red") {
                         redDengueClusters.push(cluster.coordsArr)
@@ -108,6 +117,23 @@ class Home extends React.Component {
                 lng: Number(searchPosition[1]),
             },
             zoom: 15.5,
+            showDistanceBox: false,
+            showMsg: ""
+        }, () => {
+            Axios.post("http://localhost:5000/api/v1/getNearestRiskAreaDistance", { "LatLng": addressValue })
+                .then(res => {
+                    console.log(res)
+                    let data = res.data
+                    if (data) {
+                        let msg = ""
+                        if (data.isWithinRiskArea) {
+                            msg = `You are within ${data.minimumDistance} metres of a <span style='color:${data.riskAreaColor}'> high risk</span> area.`
+                        } else {
+                            msg = `You are more than 150 metres from the high risk area`
+                        }
+                        this.setState({ showDistanceBox: true, showMsg: msg })
+                    }
+                })
         })
     }
 
@@ -182,6 +208,11 @@ class Home extends React.Component {
                         <SearchBarComponent onNewAddress={this.handleNewAddress} />
                     </div>
                 </div>
+                {/* {!this.state.loggedIn} */}
+                <RiskAreaWarningMessage
+                    isLoggedIn={this.state.loggedIn}
+                    showDistanceBox={this.state.showDistanceBox}
+                    message={this.state.showMsg} />
             </div>
 
 
