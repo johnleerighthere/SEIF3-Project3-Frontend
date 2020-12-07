@@ -13,8 +13,7 @@ class Home extends React.Component {
         center: {
             lat: 1.360270,
             lng: 103.851759
-        },
-        // zoom: 11.5
+        }
     }
 
     constructor(props) {
@@ -37,13 +36,14 @@ class Home extends React.Component {
         // Using navigator.geolocation.watchPosition instead of getCurrentPosition() method so that able to get user postion when user changes location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
+
                 this.setState({
                     currentLatLng: {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
-                    },
-                    zoom: 14,
+                    }
                 })
+
             },
                 (err) => {
                     this.setState({
@@ -70,9 +70,17 @@ class Home extends React.Component {
     getDengueClusters() {
         apiService.getDengueClusters()
             .then(response => {
-                this.setState({
-                    dengueClusters: response.data
+                const clustersData = response.data
+                const dengueClusters = []
+
+                clustersData.forEach(cluster => {
+                    dengueClusters.push(cluster.coordsArr)
                 })
+
+                this.setState({
+                    dengueClusters: dengueClusters
+                })
+
             })
             .catch(err => {
                 console.log(err)
@@ -86,7 +94,7 @@ class Home extends React.Component {
                 lat: Number(searchPosition[0]),
                 lng: Number(searchPosition[1]),
             },
-            zoom: 14,
+            zoom: 15.5,
         })
     }
 
@@ -95,6 +103,7 @@ class Home extends React.Component {
     }
 
     render() {
+
         this.getCurrentLocation()
 
         const handleApiLoaded = this.state.dengueClusters
@@ -109,6 +118,8 @@ class Home extends React.Component {
                                 google={this.props.google}
                                 initialCenter={this.props.center}
                                 zoom={this.state.zoom}
+                                center={this.state.currentLatLng}
+                                scrollwheel={true}
                             >
 
                                 <Marker
@@ -132,7 +143,7 @@ class Home extends React.Component {
                                     onMouseover={() => console.log('mouseover')}
                                     onClick={() => console.log('click')}
                                     onMouseout={() => console.log('mouseout')}
-                                    strokeColor='0000FF'
+                                    strokeColor='#0000FF'
                                     strokeOpacity={0.9}
                                     strokeWeight={2}
                                     fillColor='#0000FF'
