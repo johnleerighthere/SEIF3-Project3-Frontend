@@ -1,13 +1,10 @@
 .main-home-container {
-  // height: 100vh -50px;
-  height: 100vh;
+  border: 1px solid palegoldenrod;
 }
 
 .map {
-  // height: calc(100vh - 200px);
-  height: 100vh;
+  height: calc(100vh - 50px - 100px);
   width: 100%;
-  padding-left: 40px;
   border: 1px solid red;
   position: relative;
 }
@@ -35,4 +32,8 @@
   font-size: 16px;
   font-weight: bold;
   padding: 4;
+}
+
+.card-component {
+  margin-top: 100px;
 }

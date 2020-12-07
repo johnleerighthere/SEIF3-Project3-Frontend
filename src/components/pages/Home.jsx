@@ -2,6 +2,7 @@ import React from 'react'
 import { Map, Marker, Circle, InfoWindow, GoogleApiWrapper, Polygon } from 'google-maps-react'
 import apiService from '../../services/ApiService'
 import SearchBarComponent from '../SearchBar'
+import SearchHistoryComponent from '../SearchHistory'
 import './Home.scss'
 import Axios from 'axios'
 import RiskAreaWarningMessage from '../RiskAreaWarningMessage'
@@ -137,6 +138,10 @@ class Home extends React.Component {
         })
     }
 
+    passpropstosearchHistory = (obj) => {
+        this.setState({ history: [...this.state.history, ...obj] })
+    }
+
     componentDidMount() {
         this.getDengueClusters()
     }
@@ -149,7 +154,7 @@ class Home extends React.Component {
         const redDengueClusters = this.state.redDengueClusters
 
         return (
-            <div className="container main-home-container">
+            <div className="container-fluid main-home-container">
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
                     <div className="col-8">
@@ -201,12 +206,15 @@ class Home extends React.Component {
                             </Map>
                         </div>
                     </div>
-                </div>
-
-                <div className="row">
-                    <div className="col-8 search-bar">
-                        <SearchBarComponent onNewAddress={this.handleNewAddress} />
+                    <div className="col search-bar">
+                        <div className="row">
+                            <SearchBarComponent onNewAddress={this.handleNewAddress} />
+                        </div>
+                        <div className="row card-component">
+                            <SearchHistoryComponent history={[{location: "test", riskArea:"High"}]}/>
+                        </div>
                     </div>
+                   
                 </div>
                 {/* {!this.state.loggedIn} */}
                 <RiskAreaWarningMessage
