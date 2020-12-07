@@ -20,7 +20,9 @@ class Home extends React.Component {
         super(props)
         this.state = {
             currentLatLng: this.props.center,
-            dengueClusters: [],
+            dengueClusters:[],
+            redDengueClusters: [],
+            yellowDengueClusters: [],
             zoom: 11.5
         }
     }
@@ -72,15 +74,26 @@ class Home extends React.Component {
             .then(response => {
                 const clustersData = response.data
                 const dengueClusters = []
-
+                const redDengueClusters = []
+                const yellowDengueClusters = []
+                
                 clustersData.forEach(cluster => {
                     dengueClusters.push(cluster.coordsArr)
                 })
 
-                this.setState({
-                    dengueClusters: dengueClusters
+                clustersData.forEach(cluster => {
+                    if(cluster.color === "yellow") {
+                        yellowDengueClusters.push(cluster.coordsArr)
+                    } else if (cluster.color === "red") {
+                        redDengueClusters.push(cluster.coordsArr)
+                    }
                 })
 
+                this.setState({
+                    dengueClusters: dengueClusters,
+                    redDengueClusters: redDengueClusters,
+                    yellowDengueClusters: yellowDengueClusters
+                })
             })
             .catch(err => {
                 console.log(err)
@@ -106,7 +119,8 @@ class Home extends React.Component {
 
         this.getCurrentLocation()
 
-        const handleApiLoaded = this.state.dengueClusters
+        const yellowDengueClusters = this.state.yellowDengueClusters
+        const redDengueClusters = this.state.redDengueClusters
 
         return (
             <div className="container main-home-container">
@@ -129,7 +143,16 @@ class Home extends React.Component {
                                 />
 
                                 <Polygon
-                                    paths={handleApiLoaded}
+                                    paths={yellowDengueClusters}
+                                    strokeColor="#FFD400"
+                                    strokeOpacity={0.8}
+                                    strokeWeight={2}
+                                    fillColor="#FFD400"
+                                    fillOpacity={0.35}
+                                />
+
+                                <Polygon
+                                    paths={redDengueClusters}
                                     strokeColor="#FF0000"
                                     strokeOpacity={0.8}
                                     strokeWeight={2}
