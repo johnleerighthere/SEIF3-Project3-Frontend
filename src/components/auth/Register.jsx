@@ -1,11 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Ajv from 'ajv'
 import apiService from '../../services/ApiService'
 import registrationFormValidationSchema from '../../validation-schemas/registration-form'
 import { geocodeByAddress } from 'react-places-autocomplete';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import '../auth/Register.scss'
+// import Login from './Login'
+// import GuestRoute from '../GuestRoute'
 
 const ajv = new Ajv({ allErrors: true })
 
@@ -20,7 +22,8 @@ class Registration extends React.Component {
             confirmPassword: '',
             address: '',
             phone: '',
-            formMsg: []
+            formMsg: [],
+            redirect: false
         }
     }
 
@@ -66,6 +69,9 @@ class Registration extends React.Component {
                         })
                         return
                     }
+                    console.log(response.data.message)
+                    this.setState({ redirect: true })
+
                     // clear form input
                     this.setState({
                         name: '',
@@ -75,7 +81,7 @@ class Registration extends React.Component {
                         address: '',
                         phone: ''
                     })
-                    console.log(response.data)
+
                 })
                 .catch(err => {
                     console.log(err)
@@ -112,6 +118,13 @@ class Registration extends React.Component {
 
 
     render() {
+
+        const { redirect } = this.state;
+
+        if (redirect) {
+            return <Redirect to='/users/login' />;
+        }
+
         return (
             <div className="page-registration">
                 <div className="container">

@@ -175,10 +175,10 @@ class Home extends React.Component {
 
                                 <Polygon
                                     paths={yellowDengueClusters}
-                                    strokeColor="#FFD400"
+                                    strokeColor="#FFA500"
                                     strokeOpacity={0.8}
                                     strokeWeight={2}
-                                    fillColor="#FFD400"
+                                    fillColor="#FFA500"
                                     fillOpacity={0.35}
                                 />
 
@@ -206,21 +206,27 @@ class Home extends React.Component {
                             </Map>
                         </div>
                     </div>
-                    <div className="col search-bar">
-                        <div className="row">
+                    <div className="col-4">
+                        <div className="row mb-2">
                             <SearchBarComponent onNewAddress={this.handleNewAddress} />
                         </div>
+
                         <div className="row card-component">
-                            <SearchHistoryComponent history={[{location: "test", riskArea:"High"}]}/>
+                            {/* {!this.state.loggedIn} */}
+                            <RiskAreaWarningMessage
+                                isLoggedIn={this.state.loggedIn}
+                                showDistanceBox={this.state.showDistanceBox}
+                                message={this.state.showMsg}
+                            />
                         </div>
+                        <div className="row card-component">
+                            <SearchHistoryComponent history={[{ location: "test", riskArea: "High" }]} />
+                        </div>
+
                     </div>
-                   
+
                 </div>
-                {/* {!this.state.loggedIn} */}
-                <RiskAreaWarningMessage
-                    isLoggedIn={this.state.loggedIn}
-                    showDistanceBox={this.state.showDistanceBox}
-                    message={this.state.showMsg} />
+
             </div>
 
 

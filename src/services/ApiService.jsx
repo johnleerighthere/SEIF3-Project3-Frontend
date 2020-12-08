@@ -21,7 +21,6 @@ const dengueClustersAPI = {
     },
 
     sendRegistrationForm: (formInputs) => {
-        console.log(formInputs)
         return axiosInstance.post('/users/register', qs.stringify(
             formInputs
         ))
