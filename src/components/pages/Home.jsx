@@ -141,7 +141,7 @@ class Home extends React.Component {
                         // it should be a async await request 
                         if (this.state.loggedIn) {
                             let userObj = JSON.parse(localStorage.getItem("userObj"))
-                            let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...addressValue, ...data } })
+                            let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...addressValue, ...data, tempID: new Date().toISOString() } })
                             if (res.data && res.data.success) {
                                 toastr.success("Item added successfully")
                                 this.getLatestUserData()
