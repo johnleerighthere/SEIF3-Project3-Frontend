@@ -112,6 +112,7 @@ class Home extends React.Component {
     }
 
     handleNewAddress = (addressValue) => {
+        console.log(addressValue)
         const searchPosition = addressValue.latLng.split(',')
         this.setState({
             currentLatLng: {
@@ -222,14 +223,7 @@ class Home extends React.Component {
                             <SearchBarComponent onNewAddress={this.handleNewAddress} />
                         </div>
 
-                        <div className="row card-component">
-                            {/* {!this.state.loggedIn} */}
-                            <SearchResult
-                                isLoggedIn={this.state.loggedIn}
-                                showDistanceBox={this.state.showDistanceBox}
-                                message={this.state.showMsg}
-                            />
-                        </div>
+
                         <div className="row card-component">
                             {!this.state.loggedIn && <SearchResult
                                 isLoggedIn={this.state.loggedIn}
@@ -241,7 +235,7 @@ class Home extends React.Component {
                     </div>
                 </div>
 
-            </div>
+            </div >
 
 
         );

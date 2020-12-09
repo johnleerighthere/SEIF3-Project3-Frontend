@@ -1,6 +1,6 @@
 // import Axios from 'axios';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
@@ -89,6 +89,9 @@ class SearchBarComponent extends React.Component {
                                         className: 'location-search-input',
                                     })}
                                 />
+
+                                <Button id="search-button" type="button" value="Submit" variant="primary" onClick={this.submitData}>Submit</Button>
+
                                 <div className="autocomplete-dropdown-container">
                                     {loading && <div>Loading...</div>}
                                     {suggestions.map((suggestion, i) => {
