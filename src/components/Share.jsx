@@ -30,6 +30,17 @@ class Share extends React.Component {
                     </WhatsappShareButton>
                 </div>
 
+                <EmailShareButton subject="Dengue Heatmap App" body="Checkout if you're in a dengue zone with this app" url="https://github.com">
+                    <FontAwesomeIcon
+                        icon={faEnvelope}
+                    />
+                </EmailShareButton>
+                <TelegramShareButton title="Dengue Heatmap App" url="https://github.com">
+                    <TelegramIcon size={32} round={true} />
+                </TelegramShareButton>
+                <WhatsappShareButton title="Dengue Heatmap App" url="https://github.com">
+                    <WhatsappIcon size={32} round={true} />
+                </WhatsappShareButton>
 
             </div>
         )

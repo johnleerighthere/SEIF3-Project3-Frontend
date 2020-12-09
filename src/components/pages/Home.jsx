@@ -26,7 +26,7 @@ class Home extends React.Component {
             dengueClusters: [],
             redDengueClusters: [],
             yellowDengueClusters: [],
-            loggedIn: true,
+            loggedIn: false,
             currentLocationUrl: "",
             alreadyLocation: [],
             history: [],
