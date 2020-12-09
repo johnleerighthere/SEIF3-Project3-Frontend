@@ -9,12 +9,14 @@ import SiteFooter from './components/SiteFooter'
 import Home from './components/pages/Home'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
+
 // import SearchBar from './components/SearchBar'
 // import SearchHistory from './components/SearchHistory'
 
 class App extends React.Component {
-
-
+  renderLocation = (routerProps) => {
+    console.log(routerProps);
+  }
 
   render() {
     return (
@@ -27,14 +29,17 @@ class App extends React.Component {
             <GuestRoute path="/users/register" component={Register} />
             {/* <ProtectedRoute path="/users/dashboard" component={Dashboard} /> */}
 
-            <Route path="/">
+            <Route exact path="/">
               <Home />
             </Route>
-
+            {/* <Route exact path="/map/location/:address"
+              render={routerProps => this.renderLocation(routerProps)}>
+            </Route> */}
           </Switch>
 
           <SiteFooter />
         </Router>
+
       </div>
     )
 

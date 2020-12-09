@@ -1,9 +1,9 @@
 import React from 'react';
-import Share from '../components/Share';
-import './RiskAreaWarningMessage.scss';
+import Share from './Share';
+import './SearchResult.scss';
 
 
-class RiskAreaWarningMessage extends React.Component {
+class SearchResult extends React.Component {
     render() {
         return (
             <div>
@@ -31,4 +31,4 @@ class RiskAreaWarningMessage extends React.Component {
 }
 
 
-export default RiskAreaWarningMessage
+export default SearchResult

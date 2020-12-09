@@ -5,7 +5,7 @@ import SearchBarComponent from '../SearchBar'
 import SearchHistoryComponent from '../SearchHistory'
 import './Home.scss'
 import Axios from 'axios'
-import RiskAreaWarningMessage from '../RiskAreaWarningMessage'
+import SearchResult from '../SearchResult'
 
 require('dotenv').config()
 
@@ -28,6 +28,7 @@ class Home extends React.Component {
             yellowDengueClusters: [],
             loggedIn: false,
             currentLocationUrl: "",
+            alreadyLocation: [],
             history: [],
             zoom: 11.5,
             searchPosition: {
@@ -111,19 +112,20 @@ class Home extends React.Component {
     }
 
     handleNewAddress = (addressValue) => {
-        const searchPosition = addressValue.split(',')
+        console.log(addressValue)
+        const searchPosition = addressValue.latLng.split(',')
         this.setState({
             currentLatLng: {
                 lat: Number(searchPosition[0]),
                 lng: Number(searchPosition[1]),
             },
+
             zoom: 15.5,
             showDistanceBox: false,
             showMsg: ""
         }, () => {
-            Axios.post("http://localhost:5000/api/v1/getNearestRiskAreaDistance", { "LatLng": addressValue })
+            Axios.post("http://localhost:5000/api/v1/getNearestRiskAreaDistance", { "LatLng": addressValue.latLng })
                 .then(res => {
-                    console.log(res)
                     let data = res.data
                     if (data) {
                         let msg = ""
@@ -132,7 +134,17 @@ class Home extends React.Component {
                         } else {
                             msg = `You are more than 150 metres from the high risk area`
                         }
-                        this.setState({ showDistanceBox: true, showMsg: msg })
+
+                        /// write code to save user location in db and return saved places
+                        // it should be a async await request 
+                        console.log("12")
+                        let tempAlready = JSON.parse(JSON.stringify(this.state.alreadyLocation))
+                        tempAlready = [...tempAlready, ...[{ ...addressValue, ...data }]]
+                        this.setState({
+                            showDistanceBox: true,
+                            alreadyLocation: tempAlready,
+                            showMsg: msg
+                        })
                     }
                 })
         })
@@ -147,7 +159,7 @@ class Home extends React.Component {
     }
 
     render() {
-
+        console.log("1313131")
         this.getCurrentLocation()
 
         const yellowDengueClusters = this.state.yellowDengueClusters
@@ -211,23 +223,19 @@ class Home extends React.Component {
                             <SearchBarComponent onNewAddress={this.handleNewAddress} />
                         </div>
 
+
                         <div className="row card-component">
-                            {/* {!this.state.loggedIn} */}
-                            <RiskAreaWarningMessage
+                            {!this.state.loggedIn && <SearchResult
                                 isLoggedIn={this.state.loggedIn}
                                 showDistanceBox={this.state.showDistanceBox}
-                                message={this.state.showMsg}
-                            />
-                        </div>
-                        <div className="row card-component">
-                            <SearchHistoryComponent history={[{ location: "test", riskArea: "High" }]} />
+                                message={this.state.showMsg} />}
+                            {this.state.loggedIn && <SearchHistoryComponent history={this.state.alreadyLocation} />}
                         </div>
 
                     </div>
-
                 </div>
 
-            </div>
+            </div >
 
 
         );
