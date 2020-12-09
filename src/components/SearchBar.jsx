@@ -9,6 +9,7 @@ import {
 } from 'react-places-autocomplete';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import './SearchBar.scss'
 
 
 
@@ -55,53 +56,61 @@ class SearchBarComponent extends React.Component {
 
     render() {
         return (
-            <div>
+            <form className="form-group">
+                <div className="mb-1">
+                    <label id="search-label" style={{ fontWeight: 'bold', color: 'black' }}>
+                        Area to check:
+                        </label>
+                </div>
 
-                <form className="form-inline">
-                    <label id="search-label" style={{ fontWeight: 'bold', color: 'black' }}>Area to check:
-                    </label>
-                    <PlacesAutocomplete
-                        value={this.state.address}
-                        onChange={this.handleChange}
-                        onSelect={this.handleSelect}
-                    >
-                        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                            <div>
-                                <input className="form-group mb-2" id="search-input"
-                                    {...getInputProps({
-                                        placeholder: 'Search Places ...',
-                                        className: 'location-search-input',
-                                    })}
-                                />
-                                <div className="autocomplete-dropdown-container">
-                                    {loading && <div>Loading...</div>}
-                                    {suggestions.map((suggestion, i) => {
-                                        const className = suggestion.active
-                                            ? 'suggestion-item--active'
-                                            : 'suggestion-item';
-                                        // inline style for demonstration purpose
-                                        const style = suggestion.active
-                                            ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                            : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                                        return (
-                                            <div
-                                                key={i}
-                                                {...getSuggestionItemProps(suggestion, {
-                                                    className,
-                                                    style,
-                                                })}
-                                            >
-                                                <span>{suggestion.description}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
+                <PlacesAutocomplete
+                    value={this.state.address}
+                    onChange={this.handleChange}
+                    onSelect={this.handleSelect}
+                >
+                    {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                        <div className="mb-2">
+                            <input className="form-group" id="search-input"
+                                {...getInputProps({
+                                    placeholder: 'Search Places ...',
+                                    className: 'location-search-input',
+                                })}
+                            />
+
+                            <Button id="search-button" type="button" value="Submit" variant="primary" onClick={this.submitData}>Submit</Button>
+
+                            <div className="autocomplete-dropdown-container">
+                                {loading && <div>Loading...</div>}
+                                {suggestions.map((suggestion, i) => {
+                                    const className = suggestion.active
+                                        ? 'suggestion-item--active'
+                                        : 'suggestion-item';
+                                    // inline style for demonstration purpose
+                                    const style = suggestion.active
+                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                    return (
+                                        <div
+                                            key={i}
+                                            {...getSuggestionItemProps(suggestion, {
+                                                className,
+                                                style,
+                                            })}
+                                        >
+                                            <span>{suggestion.description}</span>
+                                        </div>
+                                    );
+                                })}
+
+
                             </div>
-                        )}
-                    </PlacesAutocomplete>
-                    <Button id="search-button" type="button" value="Submit" variant="primary" onClick={this.submitData}>Submit</Button>
-                </form>
-            </div >
+
+
+                        </div>
+                    )}
+                </PlacesAutocomplete>
+            </form>
+
         )
     }
 

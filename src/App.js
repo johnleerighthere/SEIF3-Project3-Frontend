@@ -10,6 +10,8 @@ import Home from './components/pages/Home'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 
+// import SearchBar from './components/SearchBar'
+// import SearchHistory from './components/SearchHistory'
 
 class App extends React.Component {
 

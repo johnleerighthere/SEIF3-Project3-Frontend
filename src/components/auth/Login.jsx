@@ -65,6 +65,19 @@ class Login extends React.Component {
             })
     }
 
+
+
+    // componentDidMount() {
+
+    //     console.log(this.props.location.state.email)
+    //     // Check if the data is passed in from other Component
+    //     this.setState({
+    //         email: this.props.location.state.email
+    //     })
+    //     return
+    // }
+
+
     render() {
         return (
             <div className="page-login">
@@ -75,7 +88,7 @@ class Login extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="InputEmail">Email address</label>
-                            <input type="email" onChange={e => { this.handleEmailChange(e) }} className="form-control" id="InputEmail" />
+                            <input type="email" onChange={e => { this.handleEmailChange(e) }} className="form-control" id="InputEmail" value={this.state.email} />
                         </div>
                         <div className="form-group">
                             <label htmlFor="InputPassword1">Password</label>
@@ -94,7 +107,7 @@ class Login extends React.Component {
                             <span className="create">
                                 <Link to="/users/register" >
                                     Create Account
-                                </Link>
+                                        </Link>
                             </span>
 
                             <button type="submit" className="btn btn-primary">Login</button>
@@ -106,5 +119,6 @@ class Login extends React.Component {
         )
     }
 }
+
 
 export default withRouter(withCookies(Login))

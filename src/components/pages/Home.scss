@@ -5,8 +5,9 @@
 .map {
   height: calc(100vh - 50px - 100px);
   width: 100%;
-  border: 1px solid red;
+  // border: 1px solid red;
   position: relative;
+  box-shadow: 5px 5px #c2c0c0
 }
 
 .search-bar {
@@ -35,5 +36,5 @@
 }
 
 .card-component {
-  margin-top: 100px;
+  margin-top: 20px;
 }
