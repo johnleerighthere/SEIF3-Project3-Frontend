@@ -36,8 +36,9 @@ class SearchBarComponent extends React.Component {
             return false
         }
 
-        this.props.onNewAddress(this.state.latLng)
-        this.setState({ latLng: "" })
+        // this.props.onNewAddress({latLng:this.state.latLng, locationText: })
+        this.props.onNewAddress({ type: "Other", latLng: this.state.latLng, locationText: this.state.address })
+        this.setState({ latLng: "", address: "" })
     }
 
     handleChange = address => {
