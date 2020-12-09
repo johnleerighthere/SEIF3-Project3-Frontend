@@ -18,13 +18,15 @@ class SearchHistory extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            savedLocations: []
+            savedLocations: [],
+            propsSet: false
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({ savedLocations: nextProps.history })
+        this.setState({ savedLocations: nextProps.history, propsSet: true })
         console.log("old", nextProps.history)
+
     }
 
     async getLatestUserData() {
@@ -38,23 +40,39 @@ class SearchHistory extends React.Component {
         }
     }
 
-    enableActions = (i, type, value) => {
+    enableActions = async (i, type, value) => {
         // console.log(i, type, value)
         let tempAlreadyArray = JSON.parse(JSON.stringify(this.state.savedLocations))
         tempAlreadyArray[i][type] = value
-        this.setState({ savedLocations: tempAlreadyArray }, () => {
-            if (type === "delete") {
-                var result = window.confirm("Are you sure you want to delete " + this.state.savedLocations[i]["locationText"] + " ?")
-                if (result) {
-                    toastr.success("item deleted successfully")
+        if (type === "delete") {
+            var result = window.confirm("Are you sure you want to delete " + this.state.savedLocations[i]["locationText"] + " ?")
+            if (result) {
+                delete tempAlreadyArray[i][type]
+                let userObj = JSON.parse(localStorage.getItem("userObj"))
+                let response = await Axios.post("http://localhost:5000/api/v1/deleteUserSavedLocations", {
+                    email: userObj.email,
+                    item: tempAlreadyArray[i]
+
+                })
+                this.getLatestUserData()
+                if (response.data && response.data.success) {
+                    toastr.success("Item Deleted Successfully")
+                    localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
+                    this.setState({ savedLocations: response.data.searchLocation })
+                } else {
+                    toastr.error("Something Went Wrong")
                 }
+
             }
-        })
+        } else {
+            this.setState({ savedLocations: tempAlreadyArray })
+        }
     }
 
     saveDetails = async (item, i) => {
         let userObj = JSON.parse(localStorage.getItem("userObj"))
-        let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: item })
+        delete item["edit"]
+        let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...item }, edit: true })
         if (res.data && res.data.success) {
             toastr.success("Item edited successfully")
             this.enableActions(i, "edit", false)
@@ -75,10 +93,14 @@ class SearchHistory extends React.Component {
         console.log(e)
         tempAlreadyArray[i]["locationText"] = e
         this.setState({ savedLocations: tempAlreadyArray })
+
     }
 
     handleSelect = (address, i) => {
-        this.setState({ address })
+        // this.setState({ address })
+        console.log("address", address)
+        this.handleAddressChange(address, i)
+        console.log("12")
         geocodeByAddress(address)
             .then(results => getLatLng(results[0]))
             .then(res => {
@@ -113,7 +135,7 @@ class SearchHistory extends React.Component {
                                     &nbsp;<span onClick={() => this.enableActions(i, "delete", true)}><MdDelete /></span>
                                 </Card.Title>
                                 <Card.Text>
-                                    <a href="https://goo.gl/maps/uw3y78Md81Dim72H6">{item.locationText}</a>
+                                    <a href={`http://www.google.com/maps/place/${item.latLng}`}>{item.locationText}</a>
                                     &nbsp;<span onClick={() => this.enableActions(i, "edit", true)}><FaEdit style={{ backgroundColor: "yellow" }} /></span>
                                 </Card.Text>
                             </Card.Body>}
