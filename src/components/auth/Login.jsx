@@ -56,7 +56,10 @@ class Login extends React.Component {
                     expires: moment.unix(response.data.expiresAt).toDate()
                 })
 
-                this.props.history.push('/users/dashboard')
+                window.localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
+
+                // this.props.history.push('/users/dashboard')
+                window.location.href = "/"
             })
             .catch(err => {
                 this.setState({
