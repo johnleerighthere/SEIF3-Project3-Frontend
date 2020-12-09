@@ -1,8 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './SiteHeader.scss'
+import { getAuthenticated, showToastMessage } from "./helpers/utility";
 
 class SiteHeader extends React.Component {
+
+    state = {
+        loggedIn: getAuthenticated()
+    }
+
+    componentWillReceiveProps() {
+        console.log("in header again")
+    }
+
+    loggedOut = () => {
+        document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        // showToastMessage("success", "Logout Successfully")
+        window.localStorage.clear()
+        window.location.href = "/users/login"
+
+
+    }
+
     render() {
         return (
             <header id="site-header">
@@ -13,21 +32,31 @@ class SiteHeader extends React.Component {
 
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav ml-auto">
-                                <li className="nav-item">
-                                    <Link to="/" className="nav-link" >
-                                        Home
+                                {!this.state.loggedIn &&
+                                    <>
+                                        <li className="nav-item">
+                                            <Link to="/" className="nav-link" >
+                                                Home
                                     </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/users/login" className="nav-link" >
-                                        Login
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/users/login" className="nav-link" >
+                                                Login
                                     </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/users/register" className="nav-link" >
-                                        Register
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/users/register" className="nav-link" >
+                                                Register
                                     </Link>
-                                </li>
+                                        </li>
+                                    </>
+                                }
+                                {this.state.loggedIn && <li className="nav-item" onClick={() => this.loggedOut()}>
+                                    {/* <Link to="/" className="nav-link" >
+                                            Register
+                                    </Link> */}
+                                    Logout
+                                </li>}
                             </ul>
                         </div>
                     </div>

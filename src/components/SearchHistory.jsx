@@ -11,6 +11,7 @@ import {
     // geocodeByPlaceId,
     getLatLng,
 } from 'react-places-autocomplete';
+import Axios from 'axios'
 
 class SearchHistory extends React.Component {
 
@@ -24,6 +25,17 @@ class SearchHistory extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({ savedLocations: nextProps.history })
         console.log("old", nextProps.history)
+    }
+
+    async getLatestUserData() {
+        if (this.state.loggedIn) {
+            let userObj = JSON.parse(localStorage.getItem("userObj"))
+            let response = await Axios.post("http://localhost:5000/api/v1/getUsersSavedLocations", { email: userObj.email })
+            if (response.data && response.data.success) {
+                localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
+                this.setState({ savedLocations: response.data.searchLocation })
+            }
+        }
     }
 
     enableActions = (i, type, value) => {
@@ -40,15 +52,16 @@ class SearchHistory extends React.Component {
         })
     }
 
-    saveDetails = (item, i) => {
-        // var result = window.confirm("Are you sure you want to save the detai " + this.state.savedLocations[i]["locationText"] + " ?")
-        //         if (result) {
-        //             toastr.success("item deleted successfully")
-        //         }
-        // need a api to save data and retrive the saved locations based on userid
-        console.log("new", item)
-        toastr.success("Item saved sucessfully")
-        this.enableActions(i, "edit", false)
+    saveDetails = async (item, i) => {
+        let userObj = JSON.parse(localStorage.getItem("userObj"))
+        let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: item })
+        if (res.data && res.data.success) {
+            toastr.success("Item edited successfully")
+            this.enableActions(i, "edit", false)
+            this.getLatestUserData()
+        } else {
+            toastr.error(res.data.message)
+        }
     }
 
     handleChange = (e, i) => {

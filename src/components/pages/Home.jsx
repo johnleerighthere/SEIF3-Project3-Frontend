@@ -6,6 +6,9 @@ import SearchHistoryComponent from '../SearchHistory'
 import './Home.scss'
 import Axios from 'axios'
 import SearchResult from '../SearchResult'
+import { getAuthenticated } from "../helpers/utility"
+import toastr from 'toastr'
+import 'toastr/build/toastr.min.css'
 
 require('dotenv').config()
 
@@ -26,7 +29,7 @@ class Home extends React.Component {
             dengueClusters: [],
             redDengueClusters: [],
             yellowDengueClusters: [],
-            loggedIn: false,
+            loggedIn: getAuthenticated(),
             currentLocationUrl: "",
             alreadyLocation: [],
             history: [],
@@ -112,7 +115,6 @@ class Home extends React.Component {
     }
 
     handleNewAddress = (addressValue) => {
-        console.log(addressValue)
         const searchPosition = addressValue.latLng.split(',')
         this.setState({
             currentLatLng: {
@@ -125,7 +127,7 @@ class Home extends React.Component {
             showMsg: ""
         }, () => {
             Axios.post("http://localhost:5000/api/v1/getNearestRiskAreaDistance", { "LatLng": addressValue.latLng })
-                .then(res => {
+                .then(async res => {
                     let data = res.data
                     if (data) {
                         let msg = ""
@@ -137,14 +139,23 @@ class Home extends React.Component {
 
                         /// write code to save user location in db and return saved places
                         // it should be a async await request 
-                        console.log("12")
-                        let tempAlready = JSON.parse(JSON.stringify(this.state.alreadyLocation))
-                        tempAlready = [...tempAlready, ...[{ ...addressValue, ...data }]]
-                        this.setState({
-                            showDistanceBox: true,
-                            alreadyLocation: tempAlready,
-                            showMsg: msg
-                        })
+                        if (this.state.loggedIn) {
+                            let userObj = JSON.parse(localStorage.getItem("userObj"))
+                            let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...addressValue, ...data } })
+                            if (res.data && res.data.success) {
+                                toastr.success("Item added successfully")
+                                this.getLatestUserData()
+                            } else {
+                                toastr.error(res.data.message)
+                            }
+                        } else {
+                            this.setState({
+                                showDistanceBox: true,
+                                showMsg: msg
+                            })
+                        }
+
+
                     }
                 })
         })
@@ -156,10 +167,21 @@ class Home extends React.Component {
 
     componentDidMount() {
         this.getDengueClusters()
+        this.getLatestUserData()
+    }
+
+    async getLatestUserData() {
+        if (this.state.loggedIn) {
+            let userObj = JSON.parse(localStorage.getItem("userObj"))
+            let response = await Axios.post("http://localhost:5000/api/v1/getUsersSavedLocations", { email: userObj.email })
+            if (response.data && response.data.success) {
+                localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
+                this.setState({ alreadyLocation: response.data.searchLocation })
+            }
+        }
     }
 
     render() {
-        console.log("1313131")
         this.getCurrentLocation()
 
         const yellowDengueClusters = this.state.yellowDengueClusters
