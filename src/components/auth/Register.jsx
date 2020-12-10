@@ -69,7 +69,7 @@ class Registration extends React.Component {
                         })
                         return
                     }
-                    console.log(response.data.message)
+
                     this.setState({ redirect: true })
 
                     // clear form input
@@ -153,17 +153,17 @@ class Registration extends React.Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="email">Email</label>
-                            <input type="email" className="form-control form-control-lg" name="email" value={this.state.email} onChange={e => { this.handleInputChange(e) }} />
+                            <input required type="email" className="form-control form-control-lg" name="email" value={this.state.email} onChange={e => { this.handleInputChange(e) }} />
                         </div>
                         <div className="form-row">
                             <div className="form-group col-md-6">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" className="form-control form-control-lg" name="password" value={this.state.password} placeholder="Min. 5" onChange={e => { this.handleInputChange(e) }} />
+                                <input required type="password" className="form-control form-control-lg" name="password" value={this.state.password} placeholder="Min. 5" onChange={e => { this.handleInputChange(e) }} />
                             </div>
 
                             <div className="form-group col-md-6">
                                 <label htmlFor="confirmPassword">Confirm Password</label>
-                                <input type="password" className="form-control form-control-lg" name="confirmPassword" value={this.state.confirmPassword} onChange={e => { this.handleInputChange(e) }} />
+                                <input required type="password" className="form-control form-control-lg" name="confirmPassword" value={this.state.confirmPassword} onChange={e => { this.handleInputChange(e) }} />
                             </div>
                         </div>
 

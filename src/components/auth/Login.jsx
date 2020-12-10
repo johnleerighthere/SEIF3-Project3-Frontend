@@ -3,6 +3,7 @@ import moment from 'moment'
 import { withCookies } from 'react-cookie'
 import { withRouter, Link } from 'react-router-dom'
 import apiService from '../../services/ApiService'
+import toastr from 'toastr'
 import '../auth/Login.scss'
 
 class Login extends React.Component {
@@ -51,6 +52,8 @@ class Login extends React.Component {
                     return
                 }
 
+                toastr.success(response.data.message)
+
                 this.props.cookies.set('token', response.data.token, {
                     path: '/',
                     expires: moment.unix(response.data.expiresAt).toDate()
@@ -58,7 +61,6 @@ class Login extends React.Component {
 
                 window.localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
 
-                // this.props.history.push('/users/dashboard')
                 window.location.href = "/"
             })
             .catch(err => {
@@ -67,18 +69,6 @@ class Login extends React.Component {
                 })
             })
     }
-
-
-
-    // componentDidMount() {
-
-    //     console.log(this.props.location.state.email)
-    //     // Check if the data is passed in from other Component
-    //     this.setState({
-    //         email: this.props.location.state.email
-    //     })
-    //     return
-    // }
 
 
     render() {

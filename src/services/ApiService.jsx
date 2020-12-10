@@ -14,6 +14,8 @@ const dengueClustersAPI = {
     },
 
     login: (email, password) => {
+        console.log(email)
+        console.log(password)
         return axiosInstance.post('/users/login', qs.stringify({
             email: email,
             password: password,
@@ -22,6 +24,12 @@ const dengueClustersAPI = {
 
     sendRegistrationForm: (formInputs) => {
         return axiosInstance.post('/users/register', qs.stringify(
+            formInputs
+        ))
+    },
+
+    updateUserProfile: (formInputs) => {
+        return axiosInstance.post('/users/profile', qs.stringify(
             formInputs
         ))
     }
