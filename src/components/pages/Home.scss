@@ -1,21 +1,15 @@
-.main-home-container {
-  border: 1px solid palegoldenrod;
-}
-
 .map {
   height: calc(100vh - 50px - 100px);
   width: 100%;
-  // border: 1px solid red;
   position: relative;
-  box-shadow: 5px 5px #c2c0c0
+  box-shadow: 5px 5px #c2c0c0;
 }
 
 .search-bar {
-  border: 1px solid blue;
   height: 50px;
 }
 .home-card {
-  border: 1px solid green;
+  margin-right: 20px;
 }
 
 .position {

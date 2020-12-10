@@ -73,7 +73,7 @@ class SearchBarComponent extends React.Component {
         return (
             <div>
                 {/* {this.redirectToHomePage()} */}
-                <form className="form-inline">
+                <form>
                     <label id="search-label" style={{ fontWeight: 'bold', color: 'black' }}>Area to check:
                     </label>
                     <PlacesAutocomplete
@@ -83,7 +83,7 @@ class SearchBarComponent extends React.Component {
                     >
                         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                             <div>
-                                <input className="form-group mb-2" id="search-input"
+                                <input className="form-group mb-3" id="search-input"
                                     {...getInputProps({
                                         placeholder: 'Search Places ...',
                                         className: 'location-search-input',
