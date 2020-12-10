@@ -1,6 +1,6 @@
 // import Axios from 'axios';
 import React from 'react';
-// import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
@@ -22,7 +22,7 @@ class SearchBarComponent extends React.Component {
         this.state = {
             area: "",
             latLng: null,
-            searchContent: {},
+            riskAreaAddress: "",
             searchLocation: false
         }
     }
@@ -43,19 +43,23 @@ class SearchBarComponent extends React.Component {
 
         // this.props.onNewAddress({latLng:this.state.latLng, locationText: })
         this.props.onNewAddress({ type: "Other", latLng: this.state.latLng, locationText: this.state.address })
-        // const searchContent = { type: "Other", latLng: this.state.latLng, locationText: this.state.address }
-        // this.setState({ searchContent: searchContent })
-        this.setState({ searchLocation: true })
-        this.setState({ latLng: "", address: "" })
+        const address = this.state.latLng
+
+        this.setState({
+            riskAreaAddress: address,
+            searchLocation: true,
+            latLng: "",
+            address: ""
+        })
     }
 
-    // redirectToHomePage = () => {
-    //     if (this.state.searchLocation) {
-    //         console.log("searchContent")
-    //         console.log(this.state.searchContent)
-    //         return <Redirect to={`/map/location/${this.state.searchContent}`} />
-    //     }
-    // }
+    redirectToHomePage = () => {
+        if (this.state.searchLocation) {
+            console.log("searchContent")
+            console.log(this.state.searchContent)
+            return <Redirect to={`/map/location/${this.state.riskAreaAddress}`} />
+        }
+    }
 
     handleChange = address => {
         this.setState({ address });
@@ -72,7 +76,7 @@ class SearchBarComponent extends React.Component {
     render() {
         return (
             <div>
-                {/* {this.redirectToHomePage()} */}
+                {this.redirectToHomePage()}
                 <form className="form-inline">
                     <label id="search-label" style={{ fontWeight: 'bold', color: 'black' }}>Area to check:
                     </label>

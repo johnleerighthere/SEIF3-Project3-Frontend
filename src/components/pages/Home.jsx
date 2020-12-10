@@ -39,6 +39,13 @@ class Home extends React.Component {
                 lng: 0
             },
         }
+        console.log("home.address")
+        console.log(this.props.latLng)
+        console.log("home.address")
+    }
+
+    componentDidMount() {
+        this.handleNewAddress(this.props)
     }
 
     getCurrentLocation = () => {
@@ -189,6 +196,8 @@ class Home extends React.Component {
 
         return (
             <div className="container-fluid main-home-container">
+                {/* {this.handleNewAddress(this.props)} */}
+
                 <div className="row">
                     {/* Important! Always set the container height explicitly */}
                     <div className="col-8">

@@ -15,7 +15,11 @@ import Register from './components/auth/Register'
 
 class App extends React.Component {
   renderLocation = (routerProps) => {
-    console.log(routerProps);
+    const location = routerProps.match.params.address
+    console.log(location);
+    if (location) {
+      return <Home latLng={location} />
+    }
   }
 
   render() {
@@ -32,9 +36,9 @@ class App extends React.Component {
             <Route exact path="/">
               <Home />
             </Route>
-            {/* <Route exact path="/map/location/:address"
+            <Route exact path="/map/location/:address"
               render={routerProps => this.renderLocation(routerProps)}>
-            </Route> */}
+            </Route>
           </Switch>
 
           <SiteFooter />
