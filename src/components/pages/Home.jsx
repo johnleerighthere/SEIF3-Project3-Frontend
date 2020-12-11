@@ -26,6 +26,7 @@ class Home extends React.Component {
         super(props)
         this.state = {
             currentLatLng: this.props.center,
+            locationText: '',
             dengueClusters: [],
             redDengueClusters: [],
             yellowDengueClusters: [],
@@ -38,6 +39,9 @@ class Home extends React.Component {
                 lat: 0,
                 lng: 0
             },
+            activeMarker: {},
+            selectedPlace: {},
+            showingInfoWindow: false
         }
     }
 
@@ -57,7 +61,8 @@ class Home extends React.Component {
                     currentLatLng: {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
-                    }
+                    },
+                    zoom: 12
                 })
 
             },
@@ -115,13 +120,14 @@ class Home extends React.Component {
     }
 
     handleNewAddress = (addressValue) => {
+
         const searchPosition = addressValue.latLng.split(',')
         this.setState({
             currentLatLng: {
                 lat: Number(searchPosition[0]),
                 lng: Number(searchPosition[1]),
             },
-
+            locationText: addressValue.locationText,
             zoom: 15.5,
             showDistanceBox: false,
             showMsg: ""
@@ -135,12 +141,12 @@ class Home extends React.Component {
                             let riskColor
                             if (data.riskAreaColor === "yellow") {
                                 riskColor = "#fdb827"
-                            } else if(data.riskAreaColor === "red") {
+                            } else if (data.riskAreaColor === "red") {
                                 riskColor = "#f05454"
                             }
-                            msg = `You are within ${Math.round(data.minimumDistance)} metres of a <span style='color:${riskColor}'> high risk</span> area.`
+                            msg = `is within ${Math.round(data.minimumDistance)} metres of a <span style='color:${riskColor}'> high risk</span> area.`
                         } else {
-                            msg = `You are more than 150 metres from the high risk area`
+                            msg = `is more than 150 metres from the high risk area`
                         }
 
                         /// write code to save user location in db and return saved places
@@ -187,6 +193,27 @@ class Home extends React.Component {
         }
     }
 
+    onMarkerClick = (props, marker) =>
+        this.setState({
+            activeMarker: marker,
+            selectedPlace: props,
+            showingInfoWindow: true
+        })
+
+    onInfoWindowClose = () =>
+        this.setState({
+            activeMarker: null,
+            showingInfoWindow: false
+        })
+
+    // onMapClicked = () => {
+    //     if (this.state.showingInfoWindow)
+    //         this.setState({
+    //             activeMarker: this.props.center,
+    //             showingInfoWindow: false
+    //         })
+    // }
+
     render() {
         this.getCurrentLocation()
 
@@ -205,12 +232,14 @@ class Home extends React.Component {
                                 zoom={this.state.zoom}
                                 center={this.state.currentLatLng}
                                 scrollwheel={true}
+                            // onMouseover={this.onMapClicked}
                             >
 
                                 <Marker
                                     position={this.state.currentLatLng}
-                                    onMouseover={this.onMouseoverMarker}
-                                    name={'Current location'}
+                                    name={this.state.locationText}
+                                    onMouseover={this.onMarkerClick}
+                                    onMouseout={this.onInfoWindowClose}
                                 />
 
                                 <Polygon
@@ -234,15 +263,22 @@ class Home extends React.Component {
                                 <Circle
                                     radius={150}
                                     center={this.state.currentLatLng}
-                                    onMouseover={() => console.log('mouseover')}
-                                    onClick={() => console.log('click')}
-                                    onMouseout={() => console.log('mouseout')}
                                     strokeColor='#0000FF'
                                     strokeOpacity={0.9}
                                     strokeWeight={2}
                                     fillColor='#0000FF'
                                     fillOpacity={0.2}
                                 />
+
+                                <InfoWindow
+                                    marker={this.state.activeMarker}
+                                    onClose={this.onInfoWindowClose}
+                                    visible={this.state.showingInfoWindow}
+                                >
+                                    <div>
+                                        <h6>{this.state.selectedPlace.name}</h6>
+                                    </div>
+                                </InfoWindow>
                             </Map>
                         </div>
                     </div>
@@ -256,7 +292,8 @@ class Home extends React.Component {
                             {!this.state.loggedIn && <SearchResult
                                 isLoggedIn={this.state.loggedIn}
                                 showDistanceBox={this.state.showDistanceBox}
-                                message={this.state.showMsg} />}
+                                message={this.state.showMsg}
+                                locationText={this.state.locationText} />}
                             {this.state.loggedIn && <SearchHistoryComponent history={this.state.alreadyLocation} />}
                         </div>
 
