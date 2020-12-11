@@ -11,7 +11,8 @@ class SearchResult extends React.Component {
                     <div >
                         <div className="home-card" >
                             <div>
-                                <p dangerouslySetInnerHTML={{ __html: this.props.message }}></p>
+                                <span>{this.props.locationText} </span>
+                                <span dangerouslySetInnerHTML={{ __html: this.props.message }}></span>
                             </div>
 
                             <div>

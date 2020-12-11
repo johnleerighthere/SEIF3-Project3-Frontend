@@ -98,7 +98,6 @@ class SearchHistory extends React.Component {
 
     handleSelect = (address, i) => {
         // this.setState({ address })
-        console.log("address", address)
         this.handleAddressChange(address, i)
         console.log("12")
         geocodeByAddress(address)

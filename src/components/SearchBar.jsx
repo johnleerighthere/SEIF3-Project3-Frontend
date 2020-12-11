@@ -64,9 +64,21 @@ class SearchBarComponent extends React.Component {
 
     handleSelect = address => {
         this.setState({ address })
+
         geocodeByAddress(address)
-            .then(results => getLatLng(results[0]))
-            .then(res => this.setState({ latLng: res.lat + "," + res.lng, obj: { latLng: res.lat + "," + res.lng, riskArea: "High", location: address } }))
+            .then(results =>
+                getLatLng(results[0])
+            )
+            .then(res =>
+                this.setState({
+                    latLng: res.lat + "," + res.lng,
+                    obj: {
+                        latLng: res.lat + "," + res.lng,
+                        riskArea: "High", location: address
+                    }
+                })
+            )
+
             .catch(error => console.error('Error', error));
     };
 
