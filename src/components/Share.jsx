@@ -9,15 +9,15 @@ class Share extends React.Component {
     render() {
         return (
             <div>
-                <EmailShareButton subject="Dengue Heatmap App" body="Checkout if you're in a dengue zone with this app" url="https://github.com">
-                    <FontAwesomeIcon
+                <EmailShareButton className="button" subject="Dengue Heatmap App" body="Checkout if you're in a dengue zone with this app" url="https://github.com">
+                    <FontAwesomeIcon size="lg"
                         icon={faEnvelope}
                     />
                 </EmailShareButton>
-                <TelegramShareButton title="Dengue Heatmap App" url="https://github.com">
+                <TelegramShareButton className="button" title="Dengue Heatmap App" url="https://github.com">
                     <TelegramIcon size={32} round={true} />
                 </TelegramShareButton>
-                <WhatsappShareButton title="Dengue Heatmap App" url="https://github.com">
+                <WhatsappShareButton className="button" title="Dengue Heatmap App" url="https://github.com">
                     <WhatsappIcon size={32} round={true} />
                 </WhatsappShareButton>
 

@@ -132,7 +132,13 @@ class Home extends React.Component {
                     if (data) {
                         let msg = ""
                         if (data.isWithinRiskArea) {
-                            msg = `You are within ${data.minimumDistance} metres of a <span style='color:${data.riskAreaColor}'> high risk</span> area.`
+                            let riskColor
+                            if (data.riskAreaColor === "yellow") {
+                                riskColor = "#fdb827"
+                            } else if(data.riskAreaColor === "red") {
+                                riskColor = "#f05454"
+                            }
+                            msg = `You are within ${Math.round(data.minimumDistance)} metres of a <span style='color:${riskColor}'> high risk</span> area.`
                         } else {
                             msg = `You are more than 150 metres from the high risk area`
                         }
