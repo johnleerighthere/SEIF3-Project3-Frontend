@@ -9,6 +9,7 @@ class SiteHeader extends React.Component {
         loggedIn: getAuthenticated()
     }
 
+
     componentWillReceiveProps() {
         console.log("in header again")
     }
@@ -23,6 +24,7 @@ class SiteHeader extends React.Component {
     }
 
     render() {
+        console.log(this.state.loggedIn)
         return (
             <header id="site-header">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -55,7 +57,14 @@ class SiteHeader extends React.Component {
                                     {/* <Link to="/" className="nav-link" >
                                             Register
                                     </Link> */}
-                                    Logout
+                                    <a href="" className="nav-link" >Logout</a>
+
+                                </li>}
+
+                                {this.state.loggedIn && <li className="nav-item">
+                                    <Link to="/users/profile" className="nav-link" >
+                                        Profile
+                                    </Link>
                                 </li>}
                             </ul>
                         </div>

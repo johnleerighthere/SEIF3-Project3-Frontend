@@ -20,7 +20,8 @@ class SearchBarComponent extends React.Component {
     constructor() {
         super();
         this.state = {
-            area: "",
+            area: '',
+            address: '',
             latLng: null,
             searchContent: {},
             searchLocation: false
