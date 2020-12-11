@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import Ajv from 'ajv'
 import apiService from '../../services/ApiService'
 import registrationFormValidationSchema from '../../validation-schemas/registration-form'
-import { geocodeByAddress } from 'react-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import '../auth/Register.scss'
 // import Login from './Login'
@@ -39,10 +39,13 @@ class Registration extends React.Component {
 
     handleSelect = address => {
         geocodeByAddress(address)
-            .then(results => {
-                const address = results[0].formatted_address
-                this.setState({ address })
-            })
+            // .then(results => {
+            //     const address = results[0].formatted_address
+            //     this.setState({ address })
+            // })
+            .then(results => getLatLng(results[0]))
+            .then(res => this.setState({ latLng: res.lat + "," + res.lng, obj: { latLng: res.lat + "," + res.lng, riskArea: "High", location: address } }))
+            .catch(error => console.error('Error', error));
     }
 
     handleFormSubmission(e) {
