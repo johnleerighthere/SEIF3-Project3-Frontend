@@ -32,7 +32,7 @@ class SearchHistory extends React.Component {
     async getLatestUserData() {
         if (this.state.loggedIn) {
             let userObj = JSON.parse(localStorage.getItem("userObj"))
-            let response = await Axios.post("http://localhost:5000/api/v1/getUsersSavedLocations", { email: userObj.email })
+            let response = await Axios.post("https://dengueheatmapbackend.herokuapp.com/api/v1/getUsersSavedLocations", { email: userObj.email })
             if (response.data && response.data.success) {
                 localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
                 this.setState({ savedLocations: response.data.searchLocation })
@@ -49,7 +49,7 @@ class SearchHistory extends React.Component {
             if (result) {
                 delete tempAlreadyArray[i][type]
                 let userObj = JSON.parse(localStorage.getItem("userObj"))
-                let response = await Axios.post("http://localhost:5000/api/v1/deleteUserSavedLocations", {
+                let response = await Axios.post("https://dengueheatmapbackend.herokuapp.com/api/v1/deleteUserSavedLocations", {
                     email: userObj.email,
                     item: tempAlreadyArray[i]
 
@@ -72,7 +72,7 @@ class SearchHistory extends React.Component {
     saveDetails = async (item, i) => {
         let userObj = JSON.parse(localStorage.getItem("userObj"))
         delete item["edit"]
-        let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...item }, edit: true })
+        let res = await Axios.post("https://dengueheatmapbackend.herokuapp.com/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...item }, edit: true })
         if (res.data && res.data.success) {
             toastr.success("Item edited successfully")
             this.enableActions(i, "edit", false)

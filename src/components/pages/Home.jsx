@@ -132,7 +132,7 @@ class Home extends React.Component {
             showDistanceBox: false,
             showMsg: ""
         }, () => {
-            Axios.post("http://localhost:5000/api/v1/getNearestRiskAreaDistance", { "LatLng": addressValue.latLng })
+            Axios.post("https://dengueheatmapbackend.herokuapp.com/api/v1/getNearestRiskAreaDistance", { "LatLng": addressValue.latLng })
                 .then(async res => {
                     let data = res.data
                     if (data) {
@@ -153,7 +153,7 @@ class Home extends React.Component {
                         // it should be a async await request 
                         if (this.state.loggedIn) {
                             let userObj = JSON.parse(localStorage.getItem("userObj"))
-                            let res = await Axios.post("http://localhost:5000/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...addressValue, ...data, tempID: new Date().toISOString() } })
+                            let res = await Axios.post("https://dengueheatmapbackend.herokuapp.com/api/v1/addUserSavedLocations", { email: userObj.email, item: { ...addressValue, ...data, tempID: new Date().toISOString() } })
                             if (res.data && res.data.success) {
                                 toastr.success("Item added successfully")
                                 this.getLatestUserData()
@@ -185,7 +185,7 @@ class Home extends React.Component {
     async getLatestUserData() {
         if (this.state.loggedIn) {
             let userObj = JSON.parse(localStorage.getItem("userObj"))
-            let response = await Axios.post("http://localhost:5000/api/v1/getUsersSavedLocations", { email: userObj.email })
+            let response = await Axios.post("https://dengueheatmapbackend.herokuapp.com/api/v1/getUsersSavedLocations", { email: userObj.email })
             if (response.data && response.data.success) {
                 localStorage.setItem("userObj", JSON.stringify(response.data.userDetails))
                 this.setState({ alreadyLocation: response.data.searchLocation })

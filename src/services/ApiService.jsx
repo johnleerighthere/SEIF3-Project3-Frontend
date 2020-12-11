@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-const baseURL = 'http://localhost:5000/api/v1'
+const baseURL = 'https://dengueheatmapbackend.herokuapp.com/api/v1'
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -14,8 +14,6 @@ const dengueClustersAPI = {
     },
 
     login: (email, password) => {
-        console.log(email)
-        console.log(password)
         return axiosInstance.post('/users/login', qs.stringify({
             email: email,
             password: password,
