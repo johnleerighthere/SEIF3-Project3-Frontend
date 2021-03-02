@@ -9,7 +9,7 @@
 
 ### Description
 
-![sample image of site](https://thngkia.github.io/SEIF3-PROJECT3-FRONTEND/public/Dengue_heatmap.png)
+![sample image of site](https://github.com/Thngkia/SEIF3-Project3-Frontend/blob/main/public/Dengue_heatmap.png)
 
 Click [here](https://dengueheatmapfrontend.herokuapp.com/) for the app!
 
